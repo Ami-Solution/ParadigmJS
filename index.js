@@ -9,5 +9,6 @@ const ParadigmJS = class {
 
 ParadigmJS.utils = require('./lib/utils');
 ParadigmJS.Bank = Bank;
+ParadigmJS.messages = require('./lib/messages');
 
 module.exports = ParadigmJS;
