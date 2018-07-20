@@ -1,8 +1,8 @@
 const Bank = require('./lib/bank');
 
 const ParadigmJS = class {
-  constructor() {
-
+  constructor(options) {
+    this.bank = new Bank(options)
   }
 };
 
