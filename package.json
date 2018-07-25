@@ -4,7 +4,7 @@
   "description": "JavaScript module for interconnecting the Paradigm Platform to the Ethereum blockchain network.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
