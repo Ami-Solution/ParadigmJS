@@ -5,8 +5,6 @@ const Signature = require('../lib/Signature.js').Signature;
 describe('SignatureGenerator', () => {
 
   before(async () => {
-    web3      = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
-    accounts  = await web3.eth.personal.getAccounts();
     signer    = accounts[5];
   });
 

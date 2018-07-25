@@ -7,8 +7,6 @@ const Web3 = require('web3');
 describe('Order', () => {
 
   before(async () => {
-    web3      = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
-    accounts  = await web3.eth.personal.getAccounts();
     maker     = accounts[7].toLowerCase();
     numTypes  = ['uint', 'uint', 'uint'];
     someNums  = [1, 2, 42];
