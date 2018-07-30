@@ -22,8 +22,8 @@ describe('Order', () => {
     numTypes  = ['uint', 'uint', 'uint'];
     someNums  = [1, 2, 42];
 
-
-    order = new Order(accounts[9], maker, numTypes, someNums); // accounts[9] is placeholder
+    // accounts[9] is placeholder
+    order = new Order({ subContract: accounts[9], maker: maker, dataTypes: numTypes, values: someNums });
   });
 
   it("constructor() => receives an array of args to send to the OrderGateway", () => {
