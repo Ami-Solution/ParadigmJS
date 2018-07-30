@@ -1,20 +1,29 @@
 const assert = require('assert');
 const simple = require('simple-mock');
 const Signature = require('../lib/Signature.js').Signature;
-const Order = require('../lib/Order.js').Order;
+const Paradigm = require('../lib/Paradigm.js').Paradigm;
+// const Order = require('../lib/Order.js').Order;
 const Web3 = require('web3');
 
 describe('Order', () => {
 
   before(async () => {
-    maker     = accounts[7].toLowerCase();
-    numTypes  = ['uint', 'uint', 'uint'];
-    someNums  = [1, 2, 42];
+    web3      = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
+    accounts  = await web3.eth.personal.getAccounts();
+
 
     gateway = {}
     gateway.participate = simple.mock();
 
-    order = new Order(web3, gateway, accounts[9], maker, numTypes, someNums); // accounts[9] is placeholder
+    paradigm  = new Paradigm({ web3: web3, orderStream: 'os-dev.paradigm.market', orderGateway: gateway });
+    Order = paradigm.Order;
+
+    maker     = accounts[7].toLowerCase();
+    numTypes  = ['uint', 'uint', 'uint'];
+    someNums  = [1, 2, 42];
+
+
+    order = new Order(accounts[9], maker, numTypes, someNums); // accounts[9] is placeholder
   });
 
   it("constructor() => receives an array of args to send to the OrderGateway", () => {
