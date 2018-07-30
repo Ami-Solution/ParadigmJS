@@ -2,7 +2,6 @@ const assert = require('assert');
 const simple = require('simple-mock');
 const Signature = require('../lib/Signature.js').Signature;
 const Order = require('../lib/Order.js').Order;
-const Web3 = require('web3');
 
 describe('Order', () => {
 
