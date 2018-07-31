@@ -24,6 +24,8 @@ describe('Order', () => {
 
     // accounts[9] is placeholder
     order = new Order({ subContract: accounts[9], maker: maker, dataTypes: numTypes, values: someNums });
+
+    await order.make();
   });
 
   it("constructor() => receives an array of args to send to the OrderGateway", () => {
@@ -41,7 +43,6 @@ describe('Order', () => {
   });
 
   it("make() => signs the order details and stores the vrs", async () => {
-    await order.make();
     assert.equal(Signature.recoverAddress(order.makerSignature), maker);
     assert.equal(order.values.length, 6);
   });
@@ -50,6 +51,10 @@ describe('Order', () => {
     order.take(accounts[6], [1,5,9]);
     assert.equal(gateway.participate.callCount, 1)
   });
+
+  it("toJSON() => converts the order to JSON", async () => {
+    console.log(order.toJSON().values[5]);
+  })
 
   it("validateStake() => verifies the stake of the maker (or poster)", async () => {
 
