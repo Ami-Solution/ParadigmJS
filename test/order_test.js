@@ -1,7 +1,7 @@
+const Signature = require('../lib/Signature.js');
+const Paradigm = require('../index');
 const assert = require('assert');
 const simple = require('simple-mock');
-const Signature = require('../lib/Signature.js').Signature;
-const Paradigm = require('../lib/Paradigm.js').Paradigm;
 // const Order = require('../lib/Order.js').Order;
 const Web3 = require('web3');
 

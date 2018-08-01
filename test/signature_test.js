@@ -1,6 +1,6 @@
 const Web3 = require('web3');
 const assert = require('assert');
-const Signature = require('../lib/Signature.js').Signature;
+const Signature = require('../lib/Signature.js');
 
 describe('SignatureGenerator', () => {
 
