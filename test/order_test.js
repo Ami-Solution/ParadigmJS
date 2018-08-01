@@ -39,7 +39,7 @@ describe('Order', () => {
 
   it("take() => posts the order to the OrderGateway", async () => {
     // order.take(accounts[6], [1,5,9]);
-    assert.notEqual(paradigm.OrderGateway.participate, undefined)
+    assert.notEqual(paradigm.orderGateway.participate, undefined)
   });
 
   it("toJSON() => converts the order to JSON", async () => {
