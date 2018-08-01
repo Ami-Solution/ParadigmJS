@@ -1,0 +1,16 @@
+const Web3 = require('web3');
+const Paradigm = require('./lib/Paradigm.js').Paradigm;
+let web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
+let paradigm = new Paradigm({ web3: web3 });
+const Order = paradigm.Order;
+let accounts;
+web3.eth.personal.getAccounts().then(res => accounts = res);
+
+let values = [accounts[7], accounts[8], 700, 1234];
+let dataTypes = ['address', 'address', 'uint', 'uint'];
+
+let order = new Order({ subContract: accounts[4], maker: accounts[0], dataTypes: dataTypes, values: values });
+order.make();
+
+let orderStream = paradigm.orderStream;
+orderStream.add(order).then(res => console.log(res));
