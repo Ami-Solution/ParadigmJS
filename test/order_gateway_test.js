@@ -1,4 +1,3 @@
-const assert = require('assert');
 const ParadigmJS = require('../index');
 const BasicTradeSubContract = require('../lib/contracts/BasicTradeSubContract');
 
