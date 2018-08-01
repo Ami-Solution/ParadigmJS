@@ -1,7 +1,10 @@
 const Signature = require('../lib/Signature.js');
 
 describe('Signature', async () => {
-  const signer   = accounts[5];
+  let signer;
+  before(() => {
+    signer   = accounts[5];
+  });
 
   it('generates a signature given an array of data types and an array of values', async () => {
     let dataTypes = ['address', 'address', 'uint', 'uint', 'address'];
