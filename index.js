@@ -7,9 +7,9 @@ class Paradigm {
   constructor(options) {
     this.web3 = new Web3(options.provider || 'default_provider_code');
     this.bank = new Bank(this.web3);
-    this.OrderGateway = new OrderGateway(this.web3, options.networkId);
+    this.orderGateway = new OrderGateway(this.web3, options.networkId);
     Order.prototype.web3 = this.web3;
-    Order.prototype.OrderGateway = this.OrderGateway;
+    Order.prototype.orderGateway = this.orderGateway;
     this.Order = Order;
   }
 };
