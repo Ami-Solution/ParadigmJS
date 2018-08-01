@@ -1,7 +1,7 @@
 const Bank = require('./lib/bank');
 const Web3 = require('web3');
 const OrderGateway = require('./lib/OrderGateway');
-const OrderStream = require('./OrderStream.js')
+const OrderStream = require('./lib/OrderStream.js')
 const Order = require('./lib/Order');
 
 class Paradigm {
