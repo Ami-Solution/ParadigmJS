@@ -3,10 +3,14 @@ const assert = require('assert');
 
 before(async () => {
 
-  let web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
-  let accounts = await web3.eth.personal.getAccounts();
+  global.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  global.accounts = await web3.eth.personal.getAccounts();
 
-  it('connects to web3', async () => {
+  it('should connect to web3', async () => {
     assert.equal(accounts.length, 10, "There should be 10 ETH accounts.")
+  })
+
+  it('should be network 50', async () => {
+    assert.equal(await web3.eth.net.getId(), 50, "The Contract test rpc should be running.  TODO: should discuss moving it into a mono repo");
   })
 });
