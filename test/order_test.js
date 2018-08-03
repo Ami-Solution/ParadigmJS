@@ -2,8 +2,10 @@ const Signature = require('../lib/Signature.js');
 const Paradigm = require('../index');
 const BasicTransferSubContractDetails = require('../lib/contracts/BasicTradeSubContract');
 
+const Token = require('../lib/Token');
+
 describe('Order', () => {
-  let paradigm, Order, orderGateway, maker, order, subContract, bank;
+  let paradigm, Order, orderGateway, maker, taker, order, subContract, bank, TKA, TKB;
 
   before(async () => {
     paradigm  = new Paradigm({ provider: web3.currentProvider, orderStream: 'os-dev.paradigm.market', networkId: await web3.eth.net.getId() });
@@ -11,33 +13,38 @@ describe('Order', () => {
     orderGateway = paradigm.orderGateway;
     bank = paradigm.bank;
 
-    maker     = accounts[7].toLowerCase();
+    maker = accounts[7].toLowerCase();
+    taker = accounts[8].toLowerCase();
     subContract = BasicTransferSubContractDetails.networks[await web3.eth.net.getId()].address;
     let makerDataTypes = await orderGateway.makerDataTypes(subContract);
     let takerDataTypes = await orderGateway.takerDataTypes(subContract);
+    TKA = await Token.deploy(web3, 'TokenA', 'TKA', maker);
+    TKB = await Token.deploy(web3, 'TokenB', 'TKB', taker);
 
-    const makerTransfer = bank.createTransfer(accounts[9]/* */, accounts[9]/**/, maker, accounts[9], 20, 0);
-    const signedMakerTransfer = bank.createSignedTransfer(makerTransfer);
+    await bank.giveMaxAllowanceFor(TKA.options.address, maker);
+    await bank.giveMaxAllowanceFor(TKB.options.address, taker);
+
+    const makerTransfer = bank.createTransfer(subContract, TKA.options.address, maker, taker, 1000, Date.now());
+    const signedMakerTransfer = await bank.createSignedTransfer(makerTransfer);
 
     let makerValues = {
       signer: maker,
-      signerToken: accounts[9],
-      signerTokenCount: 20,
-      buyer: accounts[9],
-      buyerToken: accounts[9],
-      buyerTokenCount: 10,
+      signerToken: TKA.options.address,
+      signerTokenCount: 1000,
+      buyer: taker,
+      buyerToken: TKB.options.address,
+      buyerTokenCount: 1000,
       signerTransfer: signedMakerTransfer,
     };
 
     order = new Order({ subContract, maker: maker, makerDataTypes, takerDataTypes, makerValues });
-
     await order.make();
   });
 
   it("constructor() => receives an array of args to send to the OrderGateway", () => {
     assert.equal(order.makerValues.signer, maker);
-    assert.equal(order.makerValues.signerTokenCount, 20);
-    assert.equal(order.makerValues.buyerTokenCount, 10);
+    assert.equal(order.makerValues.signerTokenCount, 1000);
+    assert.equal(order.makerValues.buyerTokenCount, 2000);
   });
 
   it("constructor() => receives an array of data types", async () => {
@@ -55,8 +62,15 @@ describe('Order', () => {
   });
 
   it("take() => posts the order to the OrderGateway", async () => {
-    // order.take(accounts[6], [1,5,9]);
-    assert.notEqual(paradigm.orderGateway.participate, undefined) //TODO rewrite test with
+    const takerTransfer = bank.createTransfer(subContract, TKB.options.address, taker, maker, 1000, Date.now());
+    const signedTakerTransfer = await bank.createSignedTransfer(takerTransfer);
+
+    const takerValues = {
+      tokensToBuy: 100,
+      buyerTransfer: signedTakerTransfer
+    };
+
+    order.take(taker, takerValues);
   });
 
   it("toJSON() => converts the order to JSON", async () => {
