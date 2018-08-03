@@ -3,17 +3,21 @@ const Paradigm = require('../index');
 const BasicTransferSubContractDetails = require('../lib/contracts/BasicTradeSubContract');
 
 describe('Order', () => {
-  let paradigm, Order, orderGateway, maker, order, subContract;
+  let paradigm, Order, orderGateway, maker, order, subContract, bank;
 
   before(async () => {
     paradigm  = new Paradigm({ provider: web3.currentProvider, orderStream: 'os-dev.paradigm.market', networkId: await web3.eth.net.getId() });
     Order = paradigm.Order;
     orderGateway = paradigm.orderGateway;
+    bank = paradigm.bank;
 
     maker     = accounts[7].toLowerCase();
     subContract = BasicTransferSubContractDetails.networks[await web3.eth.net.getId()].address;
     let makerDataTypes = await orderGateway.makerDataTypes(subContract);
     let takerDataTypes = await orderGateway.takerDataTypes(subContract);
+
+    const makerTransfer = bank.createTransfer(accounts[9]/* */, accounts[9]/**/, maker, accounts[9], 20, 0);
+    const signedMakerTransfer = bank.createSignedTransfer(makerTransfer);
 
     let makerValues = {
       signer: maker,
@@ -22,7 +26,7 @@ describe('Order', () => {
       buyer: accounts[9],
       buyerToken: accounts[9],
       buyerTokenCount: 10,
-      signerTransfer: {},
+      signerTransfer: signedMakerTransfer,
     };
 
     order = new Order({ subContract, maker: maker, makerDataTypes, takerDataTypes, makerValues });
