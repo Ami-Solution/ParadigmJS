@@ -3,6 +3,7 @@ const Paradigm = require('../index');
 const BasicTransferSubContractDetails = require('../lib/contracts/BasicTradeSubContract');
 
 const Token = require('../lib/Token');
+const SimpleERC20 = require('simple-erc20');
 
 describe('Order', () => {
   let paradigm, Order, orderGateway, maker, taker, order, subContract, bank, TKA, TKB;
@@ -70,7 +71,12 @@ describe('Order', () => {
       buyerTransfer: signedTakerTransfer
     };
 
-    order.take(taker, takerValues);
+    await order.take(taker, takerValues);
+
+    const tka = SimpleERC20(TKA.options.address, await web3.eth.net.getId(), web3);
+    assert.equal(await tka.balanceOf(taker), '100')
+    const tkb = SimpleERC20(TKB.options.address, await web3.eth.net.getId(), web3)
+    assert.equal(await tkb.balanceOf(maker), '100')
   });
 
   it("toJSON() => converts the order to JSON", async () => {
