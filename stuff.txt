@@ -1,16 +1,54 @@
-const Web3 = require('web3');
-const Paradigm = require('./lib/Paradigm.js').Paradigm;
-let web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
-let paradigm = new Paradigm({ web3: web3 });
+//================================  MAKE  =======================================
+
+const paradigm = new Paradigm({ provider: web3.currentProvider, orderStream: 'os-dev.paradigm.market', networkId: await web3.eth.net.getId() });
 const Order = paradigm.Order;
-let accounts;
-web3.eth.personal.getAccounts().then(res => accounts = res);
+const coinbase = await web3.eth.getCoinbase();
 
-let values = [accounts[7], accounts[8], 700, 1234];
-let dataTypes = ['address', 'address', 'uint', 'uint'];
+// Test token addresses
+const TKA = "0xc8001ac8faed38171bd8960e2a177b2b80f1e9b0";
+const TKB = "0x77ae4cded8c197b4c503895368f077ef6288462b";
+const TKC = "0xb55b454e5f040d4c6f148d0590e767ba0dcbc615";
 
-let order = new Order({ subContract: accounts[4], maker: accounts[0], dataTypes: dataTypes, values: values });
+const subContract = '0x8ba5b9d62850acf7472d0e5f5a4565317e1b1f10';
+
+let taker = '0x7ed8E5d7884FF0Be732479a475ACB82f229C9e35';
+
+const makerValues = {
+  signer: coinbase, //Coinbase is the currently active Metamask address.
+  signerToken: TKA,
+  signerTokenCount: 1000,
+  buyer: taker,
+  buyerToken: TKB,
+  buyerTokenCount: 1000
+};
+
+const transfer = paradigm.bank.createTransfer(subContract, TKA, coinbase, taker, makerValues.signerToken, Date.now());
+makerValues.signerTransfer = await paradigm.bank.createSignedTransfer(transfer);
+
+const order = new Order({ subContract, maker: coinbase, makerValues });
+
 order.make();
+paradigm.orderStream.add(order).then(res => console.log(res));
+//{txid: "4c7f58effb8ed3b4801dc0fe619a2ff262ab4f35ae8220f175ab02d5dc557249"}
 
-let orderStream = paradigm.orderStream;
-orderStream.add(order).then(res => console.log(res));
+
+//================================  TAKE  =======================================
+
+const paradigm = new Paradigm({ provider: web3.currentProvider, orderStream: 'os-dev.paradigm.market', networkId: await web3.eth.net.getId() });
+const subContract = '0x8ba5b9d62850acf7472d0e5f5a4565317e1b1f10';
+const coinbase = await web3.eth.getCoinbase();
+
+const TKA = "0xc8001ac8faed38171bd8960e2a177b2b80f1e9b0";
+const TKB = "0x77ae4cded8c197b4c503895368f077ef6288462b";
+const TKC = "0xb55b454e5f040d4c6f148d0590e767ba0dcbc615";
+
+const order = await paradigm.orderStream.find("4c7f58effb8ed3b4801dc0fe619a2ff262ab4f35ae8220f175ab02d5dc557249");
+
+const takerValues = {
+  tokensToBuy: 100 //any number <= makerTokenCount
+};
+
+const takerTransfer = paradigm.bank.createTransfer(subContract, TKB, coinbase, order.maker, order.makerValues.buyerTokenCount, Date.now());
+takerValues.buyerTransfer = await paradigm.bank.createSignedTransfer(takerTransfer);
+
+order.take(coinbase, takerValues);
