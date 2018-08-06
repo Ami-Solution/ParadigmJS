@@ -44,7 +44,7 @@ describe('Order', () => {
   it("constructor() => receives an array of args to send to the OrderGateway", () => {
     assert.equal(order.makerValues.signer, maker);
     assert.equal(order.makerValues.signerTokenCount, 1000);
-    assert.equal(order.makerValues.buyerTokenCount, 2000);
+    assert.equal(order.makerValues.buyerTokenCount, 1000);
   });
 
   it("constructor() => receives an array of data types", async () => {
