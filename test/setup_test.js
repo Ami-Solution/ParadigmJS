@@ -1,5 +1,5 @@
 const Web3 = require('web3');
-const assert = require('assert');
+const chai = require('chai');
 const ganacheProvider = require('ganache-core').provider();
 
 const Paradigm = require('../index');
@@ -12,10 +12,10 @@ const BasicTradeSubContract = require('../lib/contracts/BasicTradeSubContract');
 const TokenContract = require('../lib/contracts/Token');
 
 before(async () => {
-
+  global.assert = chai.assert;
+  chai.should();
   global.web3 = new Web3(ganacheProvider);
   global.accounts = await web3.eth.personal.getAccounts();
-  global.assert = assert;
 
   const orderGatewayContract = await (new web3.eth.Contract(OrderGatewayContract.abi))
     .deploy({ data: OrderGatewayContract.bytecode }).send({ from: accounts[0], gas: 4500000 });
