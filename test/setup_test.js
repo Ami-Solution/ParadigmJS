@@ -9,6 +9,7 @@ const Paradigm = require('../index');
 // https://goenning.net/2016/04/14/stop-reading-json-files-with-require/
 const OrderGatewayContract = require('../lib/contracts/OrderGateway');
 const BasicTradeSubContract = require('../lib/contracts/BasicTradeSubContract');
+const TokenContract = require('../lib/contracts/Token');
 
 before(async () => {
 
@@ -30,6 +31,16 @@ before(async () => {
         takerDataTypes
       ] }).send({ from: accounts[0], gas: 4500000 });
   global.subContract = basicTradeSubContract._address;
+
+  const TKAContract = await (new web3.eth.Contract(TokenContract.abi))
+    .deploy({ data: TokenContract.bytecode , arguments: ['Token A', 'TKA'] }).send({ from: accounts[7], gas: 4500000 });
+
+  global.TKA = TKAContract._address;
+
+  const TKBContract = await (new web3.eth.Contract(TokenContract.abi))
+    .deploy({ data: TokenContract.bytecode , arguments: ['Token B', 'TKB'] }).send({ from: accounts[8], gas: 4500000 });
+
+  global.TKB = TKBContract._address;
 
   it('should connect to web3', () => {
     assert.equal(accounts.length, 10, "There should be 10 ETH accounts.")

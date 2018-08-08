@@ -1,39 +1,34 @@
 const Signature = require('../lib/Signature.js');
-
-const Token = require('../lib/Token');
 const SimpleERC20 = require('simple-erc20');
 
 describe('Order', () => {
-  let Order, maker, taker, order, bank, TKA, TKB;
+  let maker, taker, order, bank;
 
   before(async () => {
-    Order = paradigm.Order;
     bank = paradigm.bank;
 
     maker = accounts[7].toLowerCase();
     taker = accounts[8].toLowerCase();
     let makerDataTypes = await orderGateway.makerDataTypes(subContract);
     let takerDataTypes = await orderGateway.takerDataTypes(subContract);
-    TKA = await Token.deploy(web3, 'TokenA', 'TKA', maker);
-    TKB = await Token.deploy(web3, 'TokenB', 'TKB', taker);
 
-    await bank.giveMaxAllowanceFor(TKA.options.address, maker);
-    await bank.giveMaxAllowanceFor(TKB.options.address, taker);
+    await bank.giveMaxAllowanceFor(TKA, maker);
+    await bank.giveMaxAllowanceFor(TKB, taker);
 
-    const makerTransfer = bank.createTransfer(subContract, TKA.options.address, maker, taker, 1000, Date.now());
+    const makerTransfer = bank.createTransfer(subContract, TKA, maker, taker, 1000, Date.now());
     const signedMakerTransfer = await bank.createSignedTransfer(makerTransfer);
 
     let makerValues = {
       signer: maker,
-      signerToken: TKA.options.address,
+      signerToken: TKA,
       signerTokenCount: 1000,
       buyer: taker,
-      buyerToken: TKB.options.address,
+      buyerToken: TKB,
       buyerTokenCount: 1000,
       signerTransfer: signedMakerTransfer,
     };
 
-    order = new Order({ subContract, maker: maker, makerDataTypes, takerDataTypes, makerValues });
+    order = new paradigm.Order({ subContract, maker: maker, makerDataTypes, takerDataTypes, makerValues });
     await order.make();
   });
 
@@ -58,7 +53,7 @@ describe('Order', () => {
   });
 
   it("take() => posts the order to the OrderGateway", async () => {
-    const takerTransfer = bank.createTransfer(subContract, TKB.options.address, taker, maker, 1000, Date.now());
+    const takerTransfer = bank.createTransfer(subContract, TKB, taker, maker, 1000, Date.now());
     const signedTakerTransfer = await bank.createSignedTransfer(takerTransfer);
 
     const takerValues = {
@@ -68,9 +63,9 @@ describe('Order', () => {
 
     await order.take(taker, takerValues);
 
-    const tka = SimpleERC20(TKA.options.address, await web3.eth.net.getId(), web3);
+    const tka = SimpleERC20(TKA, await web3.eth.net.getId(), web3);
     assert.equal(await tka.balanceOf(taker), '100')
-    const tkb = SimpleERC20(TKB.options.address, await web3.eth.net.getId(), web3)
+    const tkb = SimpleERC20(TKB, await web3.eth.net.getId(), web3)
     assert.equal(await tkb.balanceOf(maker), '100')
   });
 
