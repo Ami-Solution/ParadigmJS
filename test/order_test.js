@@ -32,6 +32,15 @@ describe('Order', () => {
     await order.make();
   });
 
+  it('should have token balances and allowances setup for the following test', async () => {
+    const tka = SimpleERC20(TKA, await web3.eth.net.getId(), web3);
+    assert.isAbove(parseInt(await tka.balanceOf(maker)), 3000);
+    assert.isAbove(parseInt(await tka.allowance(maker, bank.address)), 3000);
+    const tkb = SimpleERC20(TKB, await web3.eth.net.getId(), web3);
+    assert.isAbove(parseInt(await tkb.balanceOf(taker)), 3000);
+    assert.isAbove(parseInt(await tkb.allowance(taker, bank.address)), 3000);
+  });
+
   it("constructor() => receives an array of args to send to the OrderGateway", () => {
     assert.equal(order.makerValues.signer, maker);
     assert.equal(order.makerValues.signerTokenCount, 1000);
