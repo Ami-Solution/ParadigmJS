@@ -12,6 +12,7 @@
     "bn.js": "^4.11.8",
     "ethereumjs-abi": "^0.6.5",
     "ethereumjs-util": "^5.2.0",
+    "ganache-core": "^2.1.6",
     "mocha": "^5.2.0",
     "node-fetch": "^2.2.0",
     "simple-erc20": "^1.0.4",

@@ -1,22 +1,17 @@
 const Signature = require('../lib/Signature.js');
-const Paradigm = require('../index');
-const BasicTransferSubContractDetails = require('../lib/contracts/BasicTradeSubContract');
 
 const Token = require('../lib/Token');
 const SimpleERC20 = require('simple-erc20');
 
 describe('Order', () => {
-  let paradigm, Order, orderGateway, maker, taker, order, subContract, bank, TKA, TKB;
+  let Order, maker, taker, order, bank, TKA, TKB;
 
   before(async () => {
-    paradigm  = new Paradigm({ provider: web3.currentProvider, orderStream: 'os-dev.paradigm.market', networkId: await web3.eth.net.getId() });
     Order = paradigm.Order;
-    orderGateway = paradigm.orderGateway;
     bank = paradigm.bank;
 
     maker = accounts[7].toLowerCase();
     taker = accounts[8].toLowerCase();
-    subContract = BasicTransferSubContractDetails.networks[await web3.eth.net.getId()].address;
     let makerDataTypes = await orderGateway.makerDataTypes(subContract);
     let takerDataTypes = await orderGateway.takerDataTypes(subContract);
     TKA = await Token.deploy(web3, 'TokenA', 'TKA', maker);

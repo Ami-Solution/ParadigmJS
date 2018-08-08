@@ -15,7 +15,7 @@ class Paradigm {
     Order.prototype.orderGateway = this.orderGateway;
     this.Order = Order;
   }
-};
+}
 
 
 Paradigm.utils = require('./lib/utils');
