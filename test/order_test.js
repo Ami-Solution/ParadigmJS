@@ -1,11 +1,9 @@
-const Signature = require('../lib/Signature.js');
-const SimpleERC20 = require('simple-erc20');
-
 describe('Order', () => {
-  let maker, taker, order, bank;
+  let maker, taker, order, bank, Signature;
 
   before(async () => {
     bank = paradigm.bank;
+    Signature = paradigm.Signature;
 
     maker = accounts[7].toLowerCase();
     taker = accounts[8].toLowerCase();
@@ -33,10 +31,8 @@ describe('Order', () => {
   });
 
   it('should have token balances and allowances setup for the following test', async () => {
-    const tka = SimpleERC20(TKA, await web3.eth.net.getId(), web3);
     assert.isAbove(parseInt(await tka.balanceOf(maker)), 3000);
     assert.isAbove(parseInt(await tka.allowance(maker, bank.address)), 3000);
-    const tkb = SimpleERC20(TKB, await web3.eth.net.getId(), web3);
     assert.isAbove(parseInt(await tkb.balanceOf(taker)), 3000);
     assert.isAbove(parseInt(await tkb.allowance(taker, bank.address)), 3000);
   });
