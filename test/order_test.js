@@ -37,47 +37,80 @@ describe('Order', () => {
     assert.isAbove(parseInt(await tkb.allowance(taker, bank.address)), 3000);
   });
 
-  it("constructor() => receives an array of args to send to the OrderGateway", () => {
-    assert.equal(order.makerValues.signer, maker);
-    assert.equal(order.makerValues.signerTokenCount, 1000);
-    assert.equal(order.makerValues.buyerTokenCount, 1000);
+  describe('constructor()', () => {
+    it("receives an array of args to send to the OrderGateway", () => {
+      assert.equal(order.makerValues.signer, maker);
+      assert.equal(order.makerValues.signerTokenCount, 1000);
+      assert.equal(order.makerValues.buyerTokenCount, 1000);
+    });
+
+    it("receives an array of data types", async () => {
+      let makerDataTypes = order.makerDataTypes;
+      if(typeof makerDataTypes !== 'string') makerDataTypes = JSON.stringify(makerDataTypes);
+      assert.equal(makerDataTypes, await orderGateway.makerDataTypes(subContract)); //TODO: update
+    });
+
+    it("receives a SubContract address", () => {
+      assert.equal(order.subContract, subContract);
+    });
   });
 
-  it("constructor() => receives an array of data types", async () => {
-    let makerDataTypes = order.makerDataTypes;
-    if(typeof makerDataTypes !== 'string') makerDataTypes = JSON.stringify(makerDataTypes);
-    assert.equal(makerDataTypes, await orderGateway.makerDataTypes(subContract)); //TODO: update
+  describe('make()', () => {
+    it('should maybe test the changes of make');
+
+    it("signs the order details and stores the vrs", async () => {
+      assert.equal(Signature.recoverAddress(order.makerSignature), maker);
+    });
   });
 
-  it("constructor() => receives a SubContract address", () => {
-    assert.equal(order.subContract, subContract);
+  describe('take()', () => {
+    it("posts the order to the OrderGateway", async () => {
+      const takerTransfer = bank.createTransfer(subContract, TKB, taker, maker, 1000, Date.now());
+      const signedTakerTransfer = await bank.createSignedTransfer(takerTransfer);
+
+      const takerValues = {
+        tokensToBuy: 100,
+        buyerTransfer: signedTakerTransfer
+      };
+
+      await order.take(taker, takerValues);
+
+      const tka = SimpleERC20(TKA, await web3.eth.net.getId(), web3);
+      assert.equal(await tka.balanceOf(taker), '100')
+      const tkb = SimpleERC20(TKB, await web3.eth.net.getId(), web3)
+      assert.equal(await tkb.balanceOf(maker), '100')
+    });
   });
 
-  it("make() => signs the order details and stores the vrs", async () => {
-    assert.equal(Signature.recoverAddress(order.makerSignature), maker);
+  describe('recoverMaker()', () => {
+    it('should result in the maker', () => {
+      order.recoverMaker().should.eq(maker);
+    })
   });
 
-  it("take() => posts the order to the OrderGateway", async () => {
-    const takerTransfer = bank.createTransfer(subContract, TKB, taker, maker, 1000, Date.now());
-    const signedTakerTransfer = await bank.createSignedTransfer(takerTransfer);
-
-    const takerValues = {
-      tokensToBuy: 100,
-      buyerTransfer: signedTakerTransfer
-    };
-
-    await order.take(taker, takerValues);
-
-    const tka = SimpleERC20(TKA, await web3.eth.net.getId(), web3);
-    assert.equal(await tka.balanceOf(taker), '100')
-    const tkb = SimpleERC20(TKB, await web3.eth.net.getId(), web3)
-    assert.equal(await tkb.balanceOf(maker), '100')
+  describe('recoverPoster()', () => {
+    it('is nyi');
   });
 
-  it("toJSON() => converts the order to JSON", async () => {
-    assert.equal(typeof JSON.stringify(order), 'string');
+  describe('toJSON()', () => {
+    it("converts the order to JSON", async () => {
+      assert.equal(typeof JSON.stringify(order), 'string');
+    });
+
+    it('should have the required keys', () => {
+      order.toJSON().should.contain.keys('subContract', 'maker', 'makerDataTypes', 'takerDataTypes', 'makerValues');
+    })
   });
 
-  it("validateStake() => verifies the stake of the maker (or poster)");
+  describe('validateStake()', () => {
+    it("NYI -- verifies the stake of the maker (or poster)");
+  });
 
+  describe('serializeData', () => {
+    it('should be tested')
+  });
+
+  describe('checkDataTypes', () => {
+    it('should pull data types if they are missing')
+  });
 });
