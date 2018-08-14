@@ -4,6 +4,7 @@ describe('Order', () => {
   before(async () => {
     bank = paradigm.bank;
     Signature = paradigm.Signature;
+    Order = paradigm.Order;
 
     maker = accounts[7].toLowerCase();
     taker = accounts[8].toLowerCase();
@@ -85,6 +86,12 @@ describe('Order', () => {
   describe('recoverMaker()', () => {
     it('should result in the maker', () => {
       order.recoverMaker().should.eq(maker);
+    })
+
+    it("recovers the maker address from the JSON used to initalize it", () => {
+      let json = order.toJSON();
+      let newOrder = new Order(json);
+      newOrder.recoverMaker().should.eq(maker);
     })
   });
 
