@@ -1,13 +1,25 @@
 describe('OrderGateway', () => {
-  it('should get the makerArguments of a SubContract', async () => {
-    const makerArguments = await orderGateway.makerArguments(subContract);
-    assert.doesNotThrow(() => { JSON.parse(makerArguments) });
+  describe('participate()', () => {
+    it('should participate in a fully constructed Order.');
   });
 
-  it('should get the takerArguments of a SubContract', async () => {
-    const takerArguments = await orderGateway.takerArguments(subContract);
-    assert.doesNotThrow(() => { JSON.parse(takerArguments) });
+  describe('makerArguments()', () => {
+    it('should get the makerArguments of a SubContract', async () => {
+      const makerArguments = await orderGateway.makerArguments(subContract);
+      assert.doesNotThrow(() => { JSON.parse(makerArguments) });
+    });
   });
 
-  it('should participate in a fully constructed Order.');
+  describe('takerArguments()', () => {
+    it('should get the takerArguments of a SubContract', async () => {
+      const takerArguments = await orderGateway.takerArguments(subContract);
+      assert.doesNotThrow(() => { JSON.parse(takerArguments) });
+    });
+  });
+
+  describe('paradigmBank()', () => {
+    it('should get the paradigmBank address', async () => {
+      (await orderGateway.paradigmBank()).should.eq(paradigm.bank.address)
+    })
+  });
 });
