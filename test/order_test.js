@@ -27,9 +27,6 @@ describe('Order', () => {
       signerTransfer: signedMakerTransfer,
     };
 
-    // TODO: dataTypes should be "fields" or "arguments"
-    console.log(makerArguments)
-
     order = new paradigm.Order({ subContract, maker: maker, makerArguments, takerArguments, makerValues });
     await order.make();
   });
@@ -108,7 +105,9 @@ describe('Order', () => {
   });
 
   describe('recoverPoster()', () => {
-    it('is nyi');
+    it('returns the maker address if not signed by poster', () => {
+      order.recoverPoster().should.eq(maker);
+    });
   });
 
   describe('toJSON()', () => {
@@ -125,8 +124,8 @@ describe('Order', () => {
     it("NYI -- verifies the stake of the maker (or poster)");
   });
 
-  describe('serializeData', () => {
-    it('should be tested')
+  describe('serialize()', () => {
+    it('WRITE TESTS');
   });
 
   describe('checkDataTypes', () => {
