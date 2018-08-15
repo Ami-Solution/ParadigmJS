@@ -8,8 +8,8 @@ describe('Order', () => {
 
     maker = accounts[7].toLowerCase();
     taker = accounts[8].toLowerCase();
-    let makerDataTypes = await orderGateway.makerDataTypes(subContract);
-    let takerDataTypes = await orderGateway.takerDataTypes(subContract);
+    let makerArguments = await orderGateway.makerArguments(subContract);
+    let takerArguments = await orderGateway.takerArguments(subContract);
 
     await bank.giveMaxAllowanceFor(TKA, maker);
     await bank.giveMaxAllowanceFor(TKB, taker);
@@ -27,7 +27,10 @@ describe('Order', () => {
       signerTransfer: signedMakerTransfer,
     };
 
-    order = new paradigm.Order({ subContract, maker: maker, makerDataTypes, takerDataTypes, makerValues });
+    // TODO: dataTypes should be "fields" or "arguments"
+    console.log(makerArguments)
+
+    order = new paradigm.Order({ subContract, maker: maker, makerArguments, takerArguments, makerValues });
     await order.make();
   });
 
@@ -46,9 +49,9 @@ describe('Order', () => {
     });
 
     it("receives an array of data types", async () => {
-      let makerDataTypes = order.makerDataTypes;
-      if(typeof makerDataTypes !== 'string') makerDataTypes = JSON.stringify(makerDataTypes);
-      assert.equal(makerDataTypes, await orderGateway.makerDataTypes(subContract)); //TODO: update
+      let makerArguments = order.makerArguments;
+      if(typeof makerArguments !== 'string') makerArguments = JSON.stringify(makerArguments);
+      assert.equal(makerArguments, await orderGateway.makerArguments(subContract)); //TODO: update
     });
 
     it("receives a SubContract address", () => {
@@ -57,10 +60,19 @@ describe('Order', () => {
   });
 
   describe('make()', () => {
-    it('should maybe test the changes of make');
-
     it("signs the order details and stores the vrs", async () => {
-      assert.equal(Signature.recoverAddress(order.makerSignature), maker);
+      let makerArguments = await orderGateway.makerArguments(subContract);
+      let makerValues = {
+        signer: maker,
+        signerToken: TKA,
+        signerTokenCount: 1000,
+        buyer: taker,
+        buyerToken: TKB,
+        buyerTokenCount: 1000
+      };
+      let o2 = new Order({ subContract, maker: maker, makerArguments, makerValues });
+      await o2.make();
+      assert.equal(Signature.recoverAddress(o2.makerSignature), maker);
     });
   });
 
@@ -105,7 +117,7 @@ describe('Order', () => {
     });
 
     it('should have the required keys', () => {
-      order.toJSON().should.contain.keys('subContract', 'maker', 'makerDataTypes', 'takerDataTypes', 'makerValues');
+      order.toJSON().should.contain.keys('subContract', 'maker', 'makerArguments', 'takerArguments', 'makerValues');
     })
   });
 

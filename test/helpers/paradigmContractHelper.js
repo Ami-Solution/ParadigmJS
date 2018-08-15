@@ -18,7 +18,7 @@ module.exports = async () => {
     .deploy({ data: BasicTradeSubContract.bytecode, arguments: [
         await orderGateway.paradigmBank(),
         makerDataTypes,
-        takerDataTypes
+        takerArguments
       ] }).send({ from: accounts[0], gas: 4500000 });
   global.subContract = basicTradeSubContract._address;
 };
@@ -35,7 +35,7 @@ const makerDataTypes = JSON.stringify([
   { 'dataType': "signature", 'signatureFields': [0, 1, 2, 3, 4, 5]}//19 -> 12 | 20 -> 13 | 21 -> 14
 ]);
 
-const takerDataTypes = JSON.stringify([
+const takerArguments = JSON.stringify([
   { 'dataType': "uint", 'name': "tokensToBuy"},//6 -> 0
   { 'dataType': 'signedTransfer', 'name': 'buyerTransfer' },//13 -> 1 | 14 -> 2 | 15 -> 3 | 16 -> 4 | 17 -> 5 | 18 -> 6 | -- recipient maxAmount v r s nonce
 ]);

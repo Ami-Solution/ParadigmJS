@@ -18,7 +18,7 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "takerDataTypes",
+      "name": "takerArguments",
       "outputs": [
         {
           "name": "",
@@ -71,7 +71,7 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.24;\n\nimport \"./ParadigmBank.sol\";\nimport \"../installed_contracts/zeppelin/contracts/math/SafeMath.sol\";\n\ncontract SubContract {\n    using SafeMath for uint;\n\n    string public makerDataTypes;\n    string public takerDataTypes;\n    ParadigmBank public paradigmBank;\n\n    function participate(bytes32[] makerData, bytes32[] takerData) public returns (bool);\n\n    function ratioFor(uint value, uint numerator, uint denominator) internal pure returns (uint) {\n        return value.mul(numerator).div(denominator);\n    }\n}\n",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"./ParadigmBank.sol\";\nimport \"../installed_contracts/zeppelin/contracts/math/SafeMath.sol\";\n\ncontract SubContract {\n    using SafeMath for uint;\n\n    string public makerDataTypes;\n    string public takerArguments;\n    ParadigmBank public paradigmBank;\n\n    function participate(bytes32[] makerData, bytes32[] takerData) public returns (bool);\n\n    function ratioFor(uint value, uint numerator, uint denominator) internal pure returns (uint) {\n        return value.mul(numerator).div(denominator);\n    }\n}\n",
   "sourcePath": "/Users/Freydal/RubymineProjects/ParadigmContracts/contracts/SubContract.sol",
   "ast": {
     "absolutePath": "/Users/Freydal/RubymineProjects/ParadigmContracts/contracts/SubContract.sol",
@@ -185,7 +185,7 @@
           {
             "constant": false,
             "id": 618,
-            "name": "takerDataTypes",
+            "name": "takerArguments",
             "nodeType": "VariableDeclaration",
             "scope": 652,
             "src": "217:28:3",
@@ -748,7 +748,7 @@
           {
             "constant": false,
             "id": 618,
-            "name": "takerDataTypes",
+            "name": "takerArguments",
             "nodeType": "VariableDeclaration",
             "scope": 652,
             "src": "217:28:3",
