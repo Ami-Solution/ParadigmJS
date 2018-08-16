@@ -1,3 +1,5 @@
+const OrderGateway = require('../lib/OrderGateway');
+
 describe('OrderGateway', () => {
   describe('participate()', () => {
     it('should participate in a fully constructed Order.');
@@ -22,4 +24,17 @@ describe('OrderGateway', () => {
       (await orderGateway.paradigmBank()).should.eq(paradigm.bank.address)
     })
   });
+
+  describe('constructor()', () => {
+    let utils;
+
+    before(() => {
+      utils = paradigm.utils;
+    });
+
+    it('should accept a custom orderGatewayAddress', async () => {
+      const testInstance = new OrderGateway({ orderGatewayAddress: utils.NULL_ADDRESS });
+      testInstance.address.should.eq(utils.NULL_ADDRESS);
+    });
+  })
 });

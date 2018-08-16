@@ -9,9 +9,10 @@ const utils = require('./lib/utils');
 module.exports = class Paradigm {
   constructor(options) {
     this.web3 = new Web3(options.provider || 'default_provider_code');
+    options.web3 = this.web3;
     let endpoint                 = options.orderStreamURL || 'http://osd.paradigm.market:3000';
     this.orderStream             = new OrderStream(endpoint);
-    this.orderGateway = new OrderGateway(this.web3, options.networkId);
+    this.orderGateway = new OrderGateway(options);
     this.bank = new Bank(this.web3, this.orderGateway);
     Order.prototype.web3 = this.web3;
     Order.prototype.orderGateway = this.orderGateway;
