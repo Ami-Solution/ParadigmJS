@@ -1,7 +1,6 @@
 const Web3 = require('web3');
 const chai = require('chai');
 const ganacheProvider = require('ganache-core').provider();
-const Paradigm = require('../../index');
 
 const tokenHelper = require('./helpers/tokenHelper.js');
 const paradigmContractHelper = require('./helpers/paradigmContractHelper');
@@ -13,8 +12,6 @@ before(async () => {
   chai.should();
   global.web3 = new Web3(ganacheProvider);
   global.accounts = await web3.eth.personal.getAccounts();
-  global.paradigm = new Paradigm({ provider: web3.currentProvider, networkId: await web3.eth.net.getId() });
-
 
   await paradigmContractHelper();
 

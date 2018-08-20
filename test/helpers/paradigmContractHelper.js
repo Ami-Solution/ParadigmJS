@@ -4,11 +4,14 @@
 const OrderGatewayContract = require('../../lib/contracts/OrderGateway');
 const BasicTradeSubContract = require('../../lib/contracts/BasicTradeSubContract');
 
+const Paradigm = require('../../index');
+
 module.exports = async () => {
   const orderGatewayContract = await (new web3.eth.Contract(OrderGatewayContract.abi))
     .deploy({ data: OrderGatewayContract.bytecode }).send({ from: accounts[0], gas: 4500000 });
   OrderGatewayContract.networks[await web3.eth.net.getId()] = { address: orderGatewayContract._address };
 
+  global.paradigm = new Paradigm({ provider: web3.currentProvider, networkId: await web3.eth.net.getId() });
   global.orderGateway = paradigm.orderGateway;
 
   const basicTradeSubContract = await (new web3.eth.Contract(BasicTradeSubContract.abi))
