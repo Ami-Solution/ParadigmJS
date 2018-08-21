@@ -10,7 +10,7 @@ module.exports = class Paradigm {
   constructor(options) {
     this.web3 = new Web3(options.provider || 'default_provider_code');
     options.web3 = this.web3;
-    let endpoint                 = options.orderStreamURL || 'http://osd.paradigm.market:3000';
+    let endpoint                 = options.orderStreamURL || 'https://osd.paradigm.market';
     this.orderStream             = new OrderStream(endpoint);
     this.orderGateway = new OrderGateway(options);
     this.bank = new Bank(this.web3, this.orderGateway);
