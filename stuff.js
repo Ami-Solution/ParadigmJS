@@ -68,17 +68,14 @@ const zeroEx = new ZeroEx(web3.currentProvider, { networkId: await web3.eth.net.
 const Order = paradigm.Order;
 const EXCHANGE_ADDRESS = zeroEx.exchange.getContractAddress();
 const PROXY = zeroEx.proxy.getContractAddress();
-
-
-const subContract = '0x832d280ba9c92a3d84f015a7cd8cf5ca72bf2a95';
 const coinbase = await web3.eth.getCoinbase();
 
 // Test token addresses
 const TKA = "0xc8001ac8faed38171bd8960e2a177b2b80f1e9b0";
 const TKB = "0x77ae4cded8c197b4c503895368f077ef6288462b";
-const TKC = "0xb55b454e5f040d4c6f148d0590e767ba0dcbc615";
 
-await zeroEx.token.setUnlimitedAllowanceAsync(TKA, coinbase, PROXY);
+const TKC = "0xb55b454e5f040d4c6f148d0590e767ba0dcbc615";
+const subContract = '0x832d280ba9c92a3d84f015a7cd8cf5ca72bf2a95';
 
 const zeroExOrder = {
   maker: coinbase,
@@ -94,6 +91,8 @@ const zeroExOrder = {
   takerTokenAmount: ZeroEx.toBaseUnitAmount(new BigNumber(1), 60), // Base 18 decimals
   expirationUnixTimestampSec: new BigNumber(Date.now() + 3600000)
 };
+
+await zeroEx.token.setUnlimitedAllowanceAsync(TKA, coinbase, PROXY);
 
 let toMakerValues = {};
 
