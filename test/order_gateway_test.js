@@ -1,6 +1,12 @@
 const OrderGateway = require('../lib/OrderGateway');
 
 describe('OrderGateway', () => {
+  let orderGateway;
+
+  before(() => {
+    orderGateway = paradigm.orderGateway;
+  });
+
   describe('participate()', () => {
     it('should participate in a fully constructed Order.');
   });
@@ -17,12 +23,6 @@ describe('OrderGateway', () => {
       const takerArguments = await orderGateway.takerArguments(subContract);
       assert.doesNotThrow(() => { JSON.parse(takerArguments) });
     });
-  });
-
-  describe('paradigmBank()', () => {
-    it('should get the paradigmBank address', async () => {
-      (await orderGateway.paradigmBank()).should.eq(paradigm.bank.address)
-    })
   });
 
   describe('constructor()', () => {
