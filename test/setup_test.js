@@ -15,7 +15,7 @@ before(async () => {
   global.accounts = await web3.eth.personal.getAccounts();
   global.paradigm = new Paradigm({ provider: web3.currentProvider, networkId: await web3.eth.net.getId() });
 
-  // await paradigmContractHelper();
+  await paradigmContractHelper();
 
   await tokenHelper('TKA', 'Token A', 'TKA', accounts[7]);
   await tokenHelper('TKB', 'Token B', 'TKB', accounts[8]);
