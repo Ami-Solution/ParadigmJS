@@ -24,17 +24,4 @@ describe('OrderGateway', () => {
       assert.doesNotThrow(() => { JSON.parse(takerArguments) });
     });
   });
-
-  describe('constructor()', () => {
-    let utils;
-
-    before(() => {
-      utils = paradigm.utils;
-    });
-
-    it('should accept a custom orderGatewayAddress', async () => {
-      const testInstance = new OrderGateway({ orderGatewayAddress: utils.NULL_ADDRESS, web3 });
-      testInstance.address.should.eq(utils.NULL_ADDRESS);
-    });
-  })
 });
