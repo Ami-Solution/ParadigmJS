@@ -1,6 +1,6 @@
 {
   "name": "paradigm.js",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "JavaScript module for interconnecting the Paradigm Platform to the Ethereum blockchain network.",
   "main": "index.js",
   "scripts": {
