@@ -76,7 +76,9 @@ describe('Order', () => {
         tokensToBuy: 100
       };
 
-      const tx = await order.take(taker, takerValues);
+      (await order._takeEstimateGas(taker, takerValues)).should.be.lt(141700);
+
+      await order.take(taker, takerValues);
 
       const tka = SimpleERC20(TKA, await web3.eth.net.getId(), web3);
       assert.equal(await tka.balanceOf(taker), '100', 'TKA');
