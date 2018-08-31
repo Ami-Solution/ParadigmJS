@@ -7,8 +7,8 @@ const Signature = require('./lib/Signature');
 const utils = require('./lib/utils');
 
 module.exports = class Paradigm {
-  constructor(options) {
-    this.web3 = new Web3(options.provider || 'default_provider_code');
+  constructor(options = {}) {
+    this.web3 = new Web3(options.provider || new Web3.providers.HttpProvider('https://ropsten.infura.io'));
     options.web3 = this.web3;
     let endpoint                 = options.orderStreamURL || 'https://osd.paradigm.market';
     this.orderStream             = new OrderStream(endpoint);
