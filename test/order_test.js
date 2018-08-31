@@ -66,7 +66,7 @@ describe('Order', () => {
       };
       let o2 = new Order({ subContract, maker: maker, makerArguments, makerValues });
       await o2.make();
-      assert.equal(Signature.recoverAddress(o2.makerSignature), maker);
+      assert.equal(Signature.recoverAddress(o2.formatData(), o2.makerSignature), maker);
     });
   });
 
