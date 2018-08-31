@@ -9,10 +9,9 @@ describe('Bank', () => {
 
   describe('constructor', () => {
     it('should be created properly', () => {
-      const testBank = new Bank('web3', 'orderGateway');
+      const testBank = new Bank('web3');
 
       testBank.web3.should.eq('web3');
-      testBank.orderGateway.should.eq('orderGateway');
       testBank.MAX_UINT.toString().should.eq(bank.MAX_UINT.toString());
     });
   });
