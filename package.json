@@ -18,10 +18,10 @@
     "web3": "^1.0.0-beta.34"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "ganache-core": "^2.1.6",
-    "simple-mock": "^0.8.0",
-    "paradigm-js-test-solidity": "^1.0.0",
     "mocha": "^5.2.0",
-    "chai": "^4.1.2"
+    "paradigm-js-test-solidity": "^1.0.1",
+    "simple-mock": "^0.8.0"
   }
 }
