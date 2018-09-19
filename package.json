@@ -13,13 +13,13 @@
     "ethereumjs-abi": "^0.6.5",
     "ethereumjs-util": "^5.2.0",
     "node-fetch": "^2.2.0",
-    "paradigm-core-solidity": "0.0.1",
+    "paradigm-core-solidity": "0.0.2",
     "simple-erc20": "^1.0.6",
-    "web3": "^1.0.0-beta.34"
+    "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "ganache-core": "^2.1.6",
+    "ganache-core": "^2.2.1",
     "mocha": "^5.2.0",
     "paradigm-js-test-solidity": "^1.0.1",
     "simple-mock": "^0.8.0"
