@@ -23,4 +23,9 @@ before(async () => {
   it('should connect to web3', () => {
     assert.equal(accounts.length, 10, "There should be 10 ETH accounts.")
   });
+
+  it('should have the version set', () => {
+    assert.equal(require('../package').version, paradigm.version);
+    assert.equal(require('../package').version, Paradigm.version);
+  });
 });
