@@ -5,8 +5,9 @@ const OrderStream = require('./lib/OrderStream.js');
 const Order = require('./lib/Order');
 const Signature = require('./lib/Signature');
 const utils = require('./lib/utils');
+const version = require('./package').version;
 
-module.exports = class Paradigm {
+class Paradigm {
   constructor(options = {}) {
     this.web3 = new Web3(options.provider || new Web3.providers.HttpProvider('https://ropsten.infura.io'));
     options.web3 = this.web3;
@@ -19,5 +20,10 @@ module.exports = class Paradigm {
     this.Order = Order;
     this.utils = utils;
     this.Signature = Signature;
+    this.version = version;
   }
 };
+
+Paradigm.version = version;
+
+module.exports = Paradigm;
