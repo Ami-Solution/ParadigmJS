@@ -66,7 +66,7 @@ describe('Order', () => {
       };
       let o2 = new Order({ subContract, maker: maker, makerArguments, makerValues });
       await o2.make();
-      assert.equal(Signature.recoverAddress(o2.formatData(), o2.makerSignature), maker);
+      assert.equal(Signature.recoverAddress(o2.formatData(), o2.makerValues.signature), maker);
     });
   });
 
@@ -100,8 +100,16 @@ describe('Order', () => {
   });
 
   describe('recoverPoster()', () => {
-    it('returns the maker address if not signed by poster', () => {
+    it('returns the maker address if not signed by poster', async () => {
+      await order.post();
+
       order.recoverPoster().should.eq(maker);
+    });
+
+    it('returns the poster address', async () => {
+      await order.post(accounts[5])
+
+      order.recoverPoster().should.eq(accounts[5].toLowerCase());
     });
   });
 
