@@ -88,14 +88,19 @@ describe('Order', () => {
   });
 
   describe('recoverMaker()', () => {
-    it('should result in the maker', () => {
+    it('should result the maker', () => {
       order.recoverMaker().should.eq(maker);
     });
 
     it("recovers the maker address from the JSON used to initalize it", () => {
-      let json = order.toJSON();
-      let newOrder = new Order(json);
+      const json = order.toJSON();
+      const newOrder = new Order(json);
       newOrder.recoverMaker().should.eq(maker);
+    });
+
+    it("should return the maker if the order doesn't need to be signed", () => {
+      const newOrder = new Order({ subContract: 'f', maker: 'f', makerArguments: [], takerArguments: [], makerValues: {} });
+      newOrder.recoverMaker().should.eq('f');
     })
   });
 
