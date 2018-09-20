@@ -101,14 +101,14 @@ describe('Order', () => {
 
   describe('recoverPoster()', () => {
     it('returns the maker address if not signed by poster', async () => {
-      await order.post();
+      await order.prepareForPost();
 
       order.recoverPoster().should.eq(maker);
       order.poster.should.eq(maker);
     });
 
     it('returns the poster address', async () => {
-      await order.post(accounts[5]);
+      await order.prepareForPost(accounts[5]);
 
       order.recoverPoster().should.eq(accounts[5].toLowerCase());
       order.poster.should.eq(accounts[5]);
