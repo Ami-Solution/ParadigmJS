@@ -1,16 +1,58 @@
 const Signature = require('../lib/Signature.js');
 
-describe('Signature', async () => {
-  let signer;
-  before(() => {
-    signer   = accounts[5];
+describe('Signature', () => {
+  describe('generate()', () => {
+    it('generates a signature given an array of data types and an array of values', async () => {
+      const dataTypes = ['address', 'address', 'uint', 'uint', 'address'];
+      const values = [accounts[1], accounts[2], 42, 57, accounts[3]];
+      const hash = Signature.hash(dataTypes, values);
+      const signer = accounts[5];
+
+      let signature = await Signature.generate(web3, hash, signer);
+      assert.equal(typeof signature, 'object');
+    });
   });
 
-  it('generates a signature given an array of data types and an array of values', async () => {
-    let dataTypes = ['address', 'address', 'uint', 'uint', 'address'];
-    let values    = [accounts[1], accounts[2], 42, 57, accounts[3]];
-    let signature = await Signature.generate(web3, dataTypes, values, signer);
-    assert.equal(Signature.validate(signature), true);
+  describe('validate()', () => {
+    it('should validate a signature signer is equal to its recovered address', async () => {
+      const dataTypes = ['address', 'address', 'uint', 'uint', 'address'];
+      const values = [accounts[1], accounts[2], 42, 57, accounts[3]];
+      const hash = Signature.hash(dataTypes, values);
+      const signer = accounts[5];
+
+      let signature = await Signature.generate(web3, hash, signer);
+      Signature.validate(hash, signature, signer).should.be.true;
+    });
+
+    it('should validate a signature signer is not equal to recovered address', async () => {
+      const dataTypes = ['address', 'address', 'uint', 'uint', 'address'];
+      const values = [accounts[1], accounts[2], 42, 57, accounts[3]];
+      const hash = Signature.hash(dataTypes, values);
+      const signer = accounts[5];
+
+      let signature = await Signature.generate(web3, hash, signer);
+
+      Signature.validate(hash, signature, 'wrong').should.be.false;
+    });
   });
 
+  describe('sign()', () => {
+
+  });
+
+  describe('', () => {
+
+  });
+
+  describe('', () => {
+
+  });
+
+  describe('', () => {
+
+  });
+
+  describe('', () => {
+
+  });
 });
