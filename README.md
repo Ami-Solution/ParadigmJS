@@ -1,4 +1,5 @@
-#ParadigmJS
+ParadigmJS
+=
 
 ParadigmJS is a javascript library designed to provide a clean integration with the Paradigm Protocol global liquidity network and underlying Ethereum contracts.
 
